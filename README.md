@@ -25,7 +25,7 @@ Tüm işlem tarayıcıda yapılır, belgeler hiçbir sunucuya gönderilmez. İnt
 ## GitHub'a yükleme (GitHub Pages)
 
 1. GitHub'da yeni bir depo açın (örn. `tarama-metin`).
-2. **Add file → Upload files** ile bu klasördeki **tüm dosya ve klasörleri** (`index.html`, `app.js`, `core.js`, `toc.js`, `sw.js`, `manifest.webmanifest`, `fonts/`, `icons/`) sürükleyip bırakın → **Commit changes**.
+2. **Add file → Upload files** ile zip'ten çıkan **tüm dosyaları** (13 dosya, klasör yok) seçip yükleyin → **Commit changes**. Dosyalar deponun ana dizininde olmalı; bir alt klasörün içinde olmamalı.
 3. **Settings → Pages → Build and deployment → Source: Deploy from a branch**, Branch: `main`, klasör: `/ (root)` → **Save**.
 4. 1–2 dakika sonra uygulama `https://KULLANICIADI.github.io/tarama-metin/` adresinde açılır.
 5. Telefonda: tarayıcı menüsünden **Ana ekrana ekle**.
@@ -48,4 +48,4 @@ Güncelleme yaptığınızda `sw.js` içindeki `VERSION` değerini artırırsan�
 
 ## Kullanılan açık kaynak bileşenler
 
-[Tesseract.js](https://github.com/naptha/tesseract.js) (Apache-2.0), [PDF.js](https://github.com/mozilla/pdf.js) (Apache-2.0), [pdf-lib](https://github.com/Hopding/pdf-lib) (MIT), [JSZip](https://github.com/Stuk/jszip) (MIT), DejaVu Sans yazı tipi (serbest lisans, bkz. `fonts/LICENSE-DejaVu.txt`).
+[Tesseract.js](https://github.com/naptha/tesseract.js) (Apache-2.0), [PDF.js](https://github.com/mozilla/pdf.js) (Apache-2.0), [pdf-lib](https://github.com/Hopding/pdf-lib) (MIT), [JSZip](https://github.com/Stuk/jszip) (MIT), DejaVu Sans yazı tipi (serbest lisans, bkz. `LICENSE-DejaVu.txt`).

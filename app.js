@@ -97,7 +97,7 @@ function parseRange(text, max) {
   return [...set].sort((x, y) => x - y);
 }
 async function getFont() {
-  if (!fontBytes) fontBytes = await (await fetch('fonts/DejaVuSans.ttf')).arrayBuffer();
+  if (!fontBytes) fontBytes = await (await fetch('DejaVuSans.ttf')).arrayBuffer();
   return fontBytes;
 }
 const canvasToJpeg = (canvas, q = 0.78) => new Promise(res => canvas.toBlob(b => b.arrayBuffer().then(x => res(new Uint8Array(x))), 'image/jpeg', q));
