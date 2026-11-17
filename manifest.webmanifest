@@ -1,7 +1,7 @@
 {
   "id": "./?pwa=tarama-metin-ocr-kopru",
-  "name": "Tarama → Metin (OCR ve İçindekiler Köprüsü)",
-  "short_name": "Tarama→Metin",
+  "name": "OCRİK — OCR ve İçindekiler Köprüsü",
+  "short_name": "OCRİK",
   "description": "Taranmış PDF'leri aranabilir PDF'e ve Word'e çevirir; içindekilere köprü ekler. Tüm işlem cihazda yapılır.",
   "lang": "tr",
   "dir": "ltr",

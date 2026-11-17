@@ -1,4 +1,4 @@
-# Tarama → Metin
+# OCRİK
 
 Taranmış PDF'leri **aranabilir (kopyalanabilir) PDF'e** ve **Word'e (.docx)** çeviren, içindekilere **köprü** ekleyen tarayıcı uygulaması.
 
@@ -24,10 +24,10 @@ Tüm işlem tarayıcıda yapılır, belgeler hiçbir sunucuya gönderilmez. İnt
 
 ## GitHub'a yükleme (GitHub Pages)
 
-1. GitHub'da yeni bir depo açın (örn. `tarama-metin`).
+1. GitHub'da yeni bir depo açın (örn. `ocrik`).
 2. **Add file → Upload files** ile zip'ten çıkan **tüm dosyaları** (13 dosya, klasör yok) seçip yükleyin → **Commit changes**. Dosyalar deponun ana dizininde olmalı; bir alt klasörün içinde olmamalı.
 3. **Settings → Pages → Build and deployment → Source: Deploy from a branch**, Branch: `main`, klasör: `/ (root)` → **Save**.
-4. 1–2 dakika sonra uygulama `https://KULLANICIADI.github.io/tarama-metin/` adresinde açılır.
+4. 1–2 dakika sonra uygulama `https://KULLANICIADI.github.io/ocrik/` adresinde açılır.
 5. Telefonda: tarayıcı menüsünden **Ana ekrana ekle**.
 
 ### Diğer uygulamalarla çakışma

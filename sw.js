@@ -1,10 +1,10 @@
 /*
- * Tarama → Metin — service worker
+ * OCRİK — service worker
  * Önbellek adları bu uygulamaya özgü önekle başlar; aynı alan adındaki
  * (ör. kullanici.github.io) diğer uygulamaların önbelleklerine dokunulmaz.
  */
 const PREFIX = 'tarama-metin-ocr-kopru-';
-const VERSION = 'v3';
+const VERSION = 'v4';
 const SHELL = PREFIX + 'kabuk-' + VERSION;
 const LIBS = PREFIX + 'kutuphane-' + VERSION;
 

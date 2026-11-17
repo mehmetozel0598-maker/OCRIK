@@ -226,7 +226,7 @@ async function buildOcrOutputs() {
     }
     if (useToc) TocLinks.applyToPdf(PDFLib, doc, model, toc, { ...opts, font });
     doc.setTitle(name);
-    doc.setProducer('Tarama → Metin');
+    doc.setProducer('OCRİK');
     const bytes = await doc.save();
     addDownload(new Blob([bytes], { type: 'application/pdf' }), name + '_metinli.pdf', 'Aranabilir PDF');
   }
