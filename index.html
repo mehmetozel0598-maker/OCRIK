@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tarama → Metin | OCR ve İçindekiler Köprüsü</title>
+<meta name="theme-color" content="#16325c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tarama→Metin">
+<meta name="application-name" content="Tarama→Metin">
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #fff; --ink: #1c2330; --muted: #6a7384; --line: #dfe3ea;
+    --accent: #16325c; --accent2: #1a56db; --ok: #0f7b4a; --warn: #a15c00; --err: #b42318;
+    --r: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #11151c; --card: #1a2029; --ink: #e8ebf0; --muted: #9aa3b2; --line: #2c3442; --accent: #8fb3ff; --accent2: #8fb3ff; --ok: #4cc38a; --warn: #f0b35a; --err: #ff8a80; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+  header { background: #16325c; color: #fff; padding: 18px 16px 0; }
+  header h1 { margin: 0; font-size: 19px; font-weight: 650; letter-spacing: .2px; }
+  header p { margin: 4px 0 12px; font-size: 13px; opacity: .8; }
+  .tabs { display: flex; gap: 4px; }
+  .tab { flex: 1; border: 0; background: transparent; color: #c9d6ee; padding: 10px 6px; font: inherit; font-weight: 600; border-bottom: 3px solid transparent; cursor: pointer; }
+  .tab.on { color: #fff; border-bottom-color: #7fb0ff; }
+  main { max-width: 760px; margin: 0 auto; padding: 14px 12px 60px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; margin-bottom: 12px; }
+  .card h2 { font-size: 15px; margin: 0 0 10px; }
+  label.row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field span { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 3px; }
+  select, input[type=text], input[type=number] { width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+  input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent2); flex: none; }
+  .drop { display: block; border: 2px dashed var(--line); border-radius: var(--r); padding: 22px 12px; text-align: center; color: var(--muted); cursor: pointer; }
+  .drop.has { border-color: var(--accent2); color: var(--ink); }
+  .drop input { display: none; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 10px; padding: 11px 16px; font: inherit; font-weight: 600; background: var(--accent2); color: #fff; cursor: pointer; text-decoration: none; }
+  .btn.sec { background: transparent; color: var(--accent2); border: 1px solid var(--accent2); }
+  .btn.wide { width: 100%; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .sub { margin-left: 28px; border-left: 2px solid var(--line); padding-left: 10px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+  progress { width: 100%; height: 10px; }
+  #log { font-size: 13px; color: var(--muted); margin-top: 6px; min-height: 1.4em; }
+  .downloads { display: flex; flex-direction: column; gap: 8px; }
+  .entry { display: grid; grid-template-columns: 22px 1fr 54px 62px; gap: 6px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .entry input[type=text] { padding: 6px 8px; font-size: 14px; }
+  .entry input[type=number] { padding: 6px 4px; text-align: center; font-size: 14px; }
+  .entry .pp { text-align: center; color: var(--muted); font-size: 13px; }
+  .entry.head { font-size: 11.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .badge { font-size: 11px; padding: 1px 6px; border-radius: 99px; margin-left: 4px; }
+  .b-ok { color: var(--ok); border: 1px solid var(--ok); }
+  .b-q { color: var(--warn); border: 1px solid var(--warn); }
+  .msg { padding: 10px 12px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
+  .msg.warn { background: color-mix(in srgb, var(--warn) 14%, transparent); }
+  .msg.err { background: color-mix(in srgb, var(--err) 14%, transparent); }
+  .msg.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); }
+  .hidden { display: none !important; }
+  .inline { display: flex; gap: 8px; align-items: end; }
+  .inline .field { flex: 1; }
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tarama → Metin</h1>
+  <p>Taranmış PDF'leri aranabilir PDF'e ve Word'e çevirir; içindekilere köprü ekler. Dosyalar cihazınızdan çıkmaz.</p>
+  <nav class="tabs">
+    <button class="tab on" data-tab="ocr">OCR Dönüştür</button>
+    <button class="tab" data-tab="link">İçindekiler Köprüsü</button>
+  </nav>
+</header>
+
+<main>
+  <!-- OCR SEKMESİ -->
+  <section id="tab-ocr">
+    <div class="card">
+      <label class="drop" id="ocrDrop">
+        <input type="file" id="ocrFile" accept="application/pdf,image/*" multiple>
+        <strong>Taranmış PDF veya görüntü seçin</strong><br>
+        <small>PDF ya da JPG/PNG (birden çok görüntü seçilebilir)</small>
+      </label>
+    </div>
+
+    <div class="card">
+      <h2>Ayarlar</h2>
+      <div class="grid">
+        <label class="field"><span>Dil</span>
+          <select id="lang">
+            <option value="tur">Türkçe</option>
+            <option value="tur+eng">Türkçe + İngilizce</option>
+          </select>
+        </label>
+        <label class="field"><span>Kalite</span>
+          <select id="dpi">
+            <option value="150">Hızlı (150 dpi)</option>
+            <option value="220" selected>Normal (220 dpi)</option>
+            <option value="300">Yüksek (300 dpi)</option>
+          </select>
+        </label>
+      </div>
+      <label class="field" style="display:block;margin-top:10px"><span>Sayfa aralığı (boş = tümü)</span>
+        <input type="text" id="range" placeholder="örn. 1-10, 15">
+      </label>
+      <label class="row"><input type="checkbox" id="outPdf" checked> Aranabilir (kopyalanabilir) PDF</label>
+      <label class="row"><input type="checkbox" id="outDocx" checked> Word (.docx)</label>
+      <div class="sub" id="docxOpts">
+        <label class="row"><input type="checkbox" id="keepLines"> Satır yapısını koru (paragrafları birleştirme)</label>
+        <label class="row"><input type="checkbox" id="dropNums" checked> Sayfa numaralarını Word'e alma</label>
+      </div>
+      <label class="row"><input type="checkbox" id="ocrToc" checked> İçindekiler köprüleri ekle</label>
+      <div class="sub" id="ocrTocOpts"></div>
+    </div>
+
+    <button class="btn wide" id="ocrStart" disabled>Dönüştürmeyi başlat</button>
+  </section>
+
+  <!-- KÖPRÜ SEKMESİ -->
+  <section id="tab-link" class="hidden">
+    <div class="card">
+      <label class="drop" id="linkDrop">
+        <input type="file" id="linkFile" accept="application/pdf">
+        <strong>Metin içeren PDF seçin</strong><br>
+        <small>Word'den kaydedilmiş PDF ya da bu uygulamanın ürettiği aranabilir PDF</small>
+      </label>
+      <p class="hint">Taranmış (sadece görüntü) PDF'ler için önce "OCR Dönüştür" sekmesini kullanın; orada köprüler de eklenebilir.</p>
+    </div>
+    <div class="card">
+      <h2>Köprü ayarları</h2>
+      <div id="linkTocOpts"></div>
+    </div>
+    <button class="btn wide" id="linkStart" disabled>İçindekileri bul</button>
+  </section>
+
+  <!-- ORTAK: İLERLEME -->
+  <div class="card hidden" id="progressCard" style="margin-top:12px">
+    <h2 id="progTitle">İşleniyor…</h2>
+    <progress id="prog" max="1" value="0"></progress>
+    <div id="log"></div>
+    <button class="btn sec" id="cancel" style="margin-top:10px">İptal</button>
+  </div>
+
+  <div id="msgs" style="margin-top:12px"></div>
+
+  <!-- ORTAK: İÇİNDEKİLER GÖZDEN GEÇİRME -->
+  <div class="card hidden" id="review">
+    <h2>İçindekiler — kontrol edin</h2>
+    <p class="hint" style="margin-top:0">Her satırın gideceği PDF sayfasını kontrol edin. <span class="badge b-ok">✓</span> başlık o sayfada bulundu, <span class="badge b-q">?</span> bulunamadı (sayfanın en üstüne gider).</p>
+    <div class="inline" style="margin:10px 0">
+      <label class="field"><span>İçindekiler sayfaları (PDF sayfa no)</span><input type="text" id="tocPagesIn" placeholder="örn. 2-3"></label>
+      <button class="btn sec" id="rescan">Yeniden tara</button>
+    </div>
+    <div class="inline" style="margin:10px 0">
+      <label class="field"><span>Kaydırma: basılı sayfa 1 = PDF sayfası</span><input type="number" id="offsetIn" min="1"></label>
+      <button class="btn sec" id="applyOffset">Hepsine uygula</button>
+    </div>
+    <div class="entry head"><span></span><span>Başlık</span><span>Basılı</span><span>PDF sf.</span></div>
+    <div id="entries"></div>
+    <button class="btn wide" id="build" style="margin-top:14px">Köprüleri ekle ve dosyaları oluştur</button>
+  </div>
+
+  <!-- ORTAK: SONUÇ -->
+  <div class="card hidden" id="result">
+    <h2>Hazır</h2>
+    <div class="downloads" id="downloads"></div>
+  </div>
+</main>
+<footer>Tesseract.js · PDF.js · pdf-lib · JSZip — tüm işlem tarayıcınızda yapılır.</footer>
+
+<template id="tocOptsTpl">
+  <label class="row"><input type="checkbox" data-k="backButton" checked> Hedef sayfalara "↑ İçindekiler" düğmesi koy</label>
+  <label class="row"><input type="checkbox" data-k="headingBackLink" checked> Başlığa tıklayınca içindekilere dön</label>
+  <label class="row"><input type="checkbox" data-k="bookmarks" checked> PDF yer imleri (kenar paneli) oluştur</label>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="core.js"></script>
+<script src="toc.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
